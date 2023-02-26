@@ -5,7 +5,7 @@ var working = false;
 
 function isNewTab(url) {
     url = url.trim();
-    return url.indexOf("/newtab/") !== -1 || url.length == 0;
+    return url.indexOf("/newtab/") !== -1;
 }
 
 async function handleEvent(tabId, windowId, eventType) {
@@ -20,12 +20,8 @@ async function handleEvent(tabId, windowId, eventType) {
         return;
     }
 
-    handling = true;
-    let wasWorking = false;
-    
     var tabInfo
-    let windowPinnedTabs = await browser.tabs.query({"windowId": windowId, "pinned": true});
-
+    
     if (tabId != -1) {    
         try {
             tabInfo = await browser.tabs.get(tabId);
@@ -33,6 +29,14 @@ async function handleEvent(tabId, windowId, eventType) {
             tabId = -1;
         }
     }
+    
+    // return if url is not ready to be checked
+    if (tabId != -1 && tabInfo.url.length == 0)
+        return;
+    
+    handling = true;
+    let wasWorking = false;
+    let windowPinnedTabs = await browser.tabs.query({"windowId": windowId, "pinned": true});
 
     if (tabId != -1) {
         if (tabInfo.pinned == true && (!isNewTab(tabInfo.url) || windowPinnedTabs.length > 1) && !working) {
