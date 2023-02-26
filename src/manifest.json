@@ -1,0 +1,15 @@
+{
+	"name": "Lock One New Tab",
+	"version": "0.0.1",
+	"description": "Keep only one new tab per window and pin it.",
+	"manifest_version": 3,
+	"permissions": [
+		"tabs"
+    ],
+	"icons": {
+		"128": "logo.png"
+	},
+	"background": {
+		"service_worker": "background.js"
+	}
+}
