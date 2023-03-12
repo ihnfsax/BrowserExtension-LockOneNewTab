@@ -12,13 +12,19 @@ async function handleEvent(tabId, windowId, eventType) {
     if (handling) return;
 
     // console.log(`handle event: ${eventType}, tab id: ${tabId}`);
+
+    var windowInfo
     
     // return if window doesn't exist
     try {
-        await browser.windows.get(windowId);
+        windowInfo = await browser.windows.get(windowId);
     } catch (error) {
         return;
     }
+
+    // ignore other window type
+    if (windowInfo.type != "normal")
+        return;
 
     var tabInfo
     
